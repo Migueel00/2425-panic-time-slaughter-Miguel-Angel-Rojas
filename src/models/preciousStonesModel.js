@@ -7,4 +7,4 @@ const preciousStonesSchema = new Schema({
     value: Number
 });
 
-module.exports = mongoose.model('precous_stones', preciousStonesSchema);
+module.exports = mongoose.model('precious_stones', preciousStonesSchema, 'precious_stones');

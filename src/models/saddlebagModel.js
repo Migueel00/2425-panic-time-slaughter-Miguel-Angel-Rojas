@@ -7,4 +7,4 @@ const saddlebagSchema = new Schema({
     recover_stamina: String
 });
 
-module.exports = mongoose.model('saddlebag', saddlebagSchema);
+module.exports = mongoose.model('saddlebag', saddlebagSchema, 'saddlebag');

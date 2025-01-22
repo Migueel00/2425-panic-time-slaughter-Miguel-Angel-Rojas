@@ -36,4 +36,4 @@ const characterSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('characters', characterSchema);
+module.exports = mongoose.model('characters', characterSchema, 'characters');

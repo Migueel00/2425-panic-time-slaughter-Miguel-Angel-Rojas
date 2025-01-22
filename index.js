@@ -1,11 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
+
+const characterRoute = require('./src/routes/characterRoute');
+
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 const mongodbRoute = process.env.CONNECTIONG_STRING;
 
+app.use('/api/characters', characterRoute);
 
 async function  start() {
     try {
