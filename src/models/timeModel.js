@@ -9,4 +9,4 @@ const timeSchema = new Schema({
     km_total: Number
 });
 
-module.exports = mongoose.model('time', timeSchema);
+module.exports = mongoose.model('time', timeSchema, 'time');

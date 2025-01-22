@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const characterRoute = require('./src/routes/characterRoute');
+const timeRoute = require('./src/routes/timeRoute');
 const Die = require('./src/helpers/Die');
 
 
@@ -12,6 +13,7 @@ const mongodbRoute = process.env.CONNECTIONG_STRING;
 
 // router
 app.use('/api/characters', characterRoute);
+app.use('/api/time', timeRoute);
 
 // connection mongoDb
 async function  start() {
