@@ -44,6 +44,8 @@ const die10 = new Die(10);
 async function gameCicle(){
     const characters = await characterService.getAllCharacters();
     await morning(characters);
+    travesy();
+    afternoon(characters);
 }
 
 async function morning(characters){
@@ -57,17 +59,17 @@ async function morning(characters){
         
         switch(roll){
             case 1:
-                console.log(`${character.name} roll: ${roll} and wins 2 points of strength`);
+                console.log(`${character.name} wins 2 points of strength`);
                 character.stats.strength += 2;
                 break;
 
             case 2:
-                console.log(`${character.name} roll: ${roll} and wins 2 points of dexterity`);
+                console.log(`${character.name} wins 2 points of dexterity`);
                 character.stats.dexterity += 2;
                 break;
 
             case 3:
-                console.log(`${character.name} roll: ${roll} and wins 1 points of strength and another of dexterity`);
+                console.log(`${character.name} wins 1 points of strength and another of dexterity`);
                 character.stats.strength += 1;
                 character.stats.dexterity += 1;
                 break;
@@ -100,6 +102,142 @@ const recollect = (character, preciousStones, saddlebag) => {
     const randomFood = Math.floor(Math.random() * saddlebag.length);
     character.equipment.saddlebag.push(saddlebag[randomFood]._id);
     console.log(`${character.name} recollet and gain one piece of food`);
+}
+
+function travesy(){
+    const roll = die10.roll();
+    console.log('The team walks ' + roll + 'km');
+}
+
+function afternoon(characters){
+
+    catatony(characters);
+}
+
+const catatony = (characters) => {
+    const randomCharacter = Math.floor(Math.random() * characters.length);
+    console.log(`The joker rolls the die and select ${characters[randomCharacter].name} to do the first action`);
+}
+
+const handleAction = (character) => {
+    const occupation = character.occupation;
+
+    switch(occupation){
+        case 'warrior':
+            break;
+
+        case 'gambler':
+            break;
+
+        case 'thug':
+            break;
+
+        case 'mage':
+            break;
+
+        case 'peasant':
+            break;
+    }
+}
+
+const handleActionMage = (mage, otherCharacter) => {
+    const roll = die100.roll();
+
+    if(roll <= mage.stats.dexterity){
+        const weaponDamage = calculateWeaponDamage(mage.equipment.weapons[0]);
+        const totalDamage = Math.ceil(weaponDamage + (mage.stats.dexterity / 4));
+        otherCharacter.stats.strength -= totalDamage;
+    }
+
+    return;
+}
+
+const handleActionWarrior = (warrior, otherCharacter) => {
+    const roll = die100.roll();
+
+    if(roll <= warrior.stats.dexterity){
+        const weaponDamage = calculateWeaponDamage(warrior.equipment.weapons[0]);
+        const totalDamage = Math.ceil(weaponDamage + (warrior.stats.strength / 4));
+        otherCharacter.stats.strength -= totalDamage;
+    }
+}
+
+const handleThugAction = (thug, otherCharacter) => {
+    const roll3 = die3.roll();
+
+    switch(roll3){
+        case 1:
+            thug.equipment.pouch.gold += 1;
+            otherCharacter.equipment.pouch.gold -= 1;
+            break;
+
+        case 2:
+            const coins = Math.ceil(thug.stats.dexterity / 2);
+            thug.equipment.pouch.coins += coins;
+            otherCharacter.equipment.pouch.coins -= coins;
+            break;
+
+        case 3:
+            thug.equipment.quiver += 1;
+            otherCharacter.equipment.quiver -= 1;
+            break;
+    }
+
+    const roll100 = die100.roll();
+
+    if(roll100 <= thug.stats.dexterity){
+        const weaponDamage = calculateWeaponDamage(thug.equipment.weapons[0]);
+        const totalDamage = Math.ceil(weaponDamage + (thug.stats.dexterity / 4));
+        otherCharacter.stats.strength -= totalDamage;
+        thug.equipment.quiver -= 1;
+    }
+}
+
+const calculateWeaponDamage = (weapon) => {
+    let damage = 0;
+    for(let i = 1;  i < weapon.num_die_damage; i++){
+        damage += die4.roll();
+    }
+
+    return weapon.quality < 0 ? Math.ceil(damage + (weapon.quality / 5)) : 0;
+}
+
+const handlePeasant = (peasant, otherCharacters) => {
+    for(let i = 0; i < 3; i++){
+        const random = Math.floor(Math.random() * otherCharacters.length);
+        const otherCharacter = otherCharacters[random];
+        giveFoodIfPeasantHave(peasant, otherCharacter);
+    }
+}
+
+const giveFoodIfPeasantHave = (peasant, otherCharacter) => {
+    if(peasant.equipment.saddlebag.length > 0){
+        const random = Math.floor( Math.random() * peasant.equipment.saddlebag.length);
+        otherCharacter.equipment.saddlebag.push(peasant.equipment.saddlebag[random]);
+        peasant.equipment.saddlebag.splice(random, 1);
+    }
+}
+
+const handleGamblerAction = (gambler, otherCharacter) => {
+    const roll = die2.roll();
+
+    switch(roll){
+        case 1:
+            givePreciousStoneIfHave(gambler, otherCharacter);
+            break;
+
+        case 2:
+            givePreciousStoneIfHave(otherCharacter, gambler);
+            break;
+    }
+}
+
+const givePreciousStoneIfHave = (winner, loser) => {
+    if(loser.equipment.pouch.precious_stones.length > 0){
+        const random = Math.floor( Math.random() * loser.equipment.pouch.precious_stones);
+        winner.equipment.pouch.precious_stones.push(loser.equipment.pouch.precious_stones[random]);
+        loser.equipment.pouch.precious_stones.splice(random, 1);
+    }
 }
 
 gameCicle();
