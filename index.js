@@ -112,6 +112,7 @@ function travesy(){
 function afternoon(characters){
 
     catatony(characters);
+    loseOfStamina(characters, 'sunday');
 }
 
 const catatony = (characters) => {
@@ -274,6 +275,22 @@ const givePreciousStoneIfHave = (winner, loser) => {
         loser.equipment.pouch.precious_stones.splice(random, 1);
         console.log(`${winner.name} wins and take on precious stone from ${loser.name}`);
     }
+}
+
+const loseOfStamina = (characters, day) => {
+    if(day === 'saturday' || day === 'sunday'){
+        console.log(`Its ${day} all the teammates lose 4 of stamina`);
+        handleLoseOfStamina(characters, 4);
+    }else{
+        console.log(`Its ${day} all team lose 2 points of stamina`);
+        handleLoseOfStamina(characters, 2);
+    }
+}
+
+const handleLoseOfStamina = (characters,points) => {
+    characters.map(character => {
+        character.stats.stamina -= points;
+    });
 }
 
 gameCicle();
