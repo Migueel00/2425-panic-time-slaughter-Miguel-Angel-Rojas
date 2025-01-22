@@ -173,6 +173,7 @@ const handleActionMage = (mage, otherCharacter) => {
         const weaponDamage = calculateWeaponDamage(mage.equipment.weapons[0]);
         const totalDamage = Math.ceil(weaponDamage + (mage.stats.dexterity / 4));
         otherCharacter.stats.strength -= totalDamage;
+        console.log(`The ${mage.name} goes crazy and attack ${otherCharacter.name} hurting ${totalDamage}`);
     }
 
     return;
@@ -182,9 +183,11 @@ const handleActionWarrior = (warrior, otherCharacter) => {
     const roll = die100.roll();
 
     if(roll <= warrior.stats.dexterity){
+
         const weaponDamage = calculateWeaponDamage(warrior.equipment.weapons[0]);
         const totalDamage = Math.ceil(weaponDamage + (warrior.stats.strength / 4));
         otherCharacter.stats.strength -= totalDamage;
+        console.log(`${warrior.name} goes crazy and attack ${otherCharacter.name} and hits ${totalDamage} Damage`)
     }
 }
 
@@ -195,17 +198,20 @@ const handleThugAction = (thug, otherCharacter) => {
         case 1:
             thug.equipment.pouch.gold += 1;
             otherCharacter.equipment.pouch.gold -= 1;
+            console.log(`The thug take a lingot of gold from ${otherCharacter.name}`);
             break;
 
         case 2:
             const coins = Math.ceil(thug.stats.dexterity / 2);
             thug.equipment.pouch.coins += coins;
             otherCharacter.equipment.pouch.coins -= coins;
+            console.log(`The thug take ${coins} coins from ${otherCharacter.name}`);
             break;
 
         case 3:
             thug.equipment.quiver += 1;
             otherCharacter.equipment.quiver -= 1;
+            console.log(`The thug take on arrow from ${otherCharacter.name} quiver`);
             break;
     }
 
@@ -216,6 +222,7 @@ const handleThugAction = (thug, otherCharacter) => {
         const totalDamage = Math.ceil(weaponDamage + (thug.stats.dexterity / 4));
         otherCharacter.stats.strength -= totalDamage;
         thug.equipment.quiver -= 1;
+        console.log(`The thug goes crazy and attak ${otherCharacter.name} hurting ${totalDamage}`);
     }
 }
 
@@ -241,10 +248,12 @@ const giveFoodIfPeasantHave = (peasant, otherCharacter) => {
         const random = Math.floor( Math.random() * peasant.equipment.saddlebag.length);
         otherCharacter.equipment.saddlebag.push(peasant.equipment.saddlebag[random]);
         peasant.equipment.saddlebag.splice(random, 1);
+        console.log(`The peasant have foond and gives ${otherCharacter.name} some food`);
     }
 }
 
 const handleGamblerAction = (gambler, otherCharacter) => {
+    console.log(`Gambler action: `);
     const roll = die2.roll();
 
     switch(roll){
@@ -263,6 +272,7 @@ const givePreciousStoneIfHave = (winner, loser) => {
         const random = Math.floor( Math.random() * loser.equipment.pouch.precious_stones);
         winner.equipment.pouch.precious_stones.push(loser.equipment.pouch.precious_stones[random]);
         loser.equipment.pouch.precious_stones.splice(random, 1);
+        console.log(`${winner.name} wins and take on precious stone from ${loser.name}`);
     }
 }
 
