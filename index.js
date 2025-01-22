@@ -117,25 +117,51 @@ function afternoon(characters){
 const catatony = (characters) => {
     const randomCharacter = Math.floor(Math.random() * characters.length);
     console.log(`The joker rolls the die and select ${characters[randomCharacter].name} to do the first action`);
+    
+    const finalCharacters = characters.filter(character => character.name !== characters[randomCharacter].name);
+    
+    const randomCharacter2 = Math.floor(Math.random() * finalCharacters.length);
+
+    handleAction(characters[randomCharacter], finalCharacters[randomCharacter2], finalCharacters);
+
+
+    const orderedCharacters = orderCharactersByDexterity(finalCharacters);
+
+    orderedCharacters.map(character => {
+        const filteredArray = orderedCharacters.filter(filtered => character.name !== filtered.name);
+        const random = Math.floor(Math.random() * filteredArray.length);
+        handleAction(character, filteredArray[random], filteredArray);
+    });
 }
 
-const handleAction = (character) => {
+const orderCharactersByDexterity = (characters) => {
+    return characters.sort((a, b) => (
+        b.stats.dexterity - a.stats.dexterity
+    ));
+}
+
+const handleAction = (character, otherCharacter, filteredArray) => {
     const occupation = character.occupation;
 
     switch(occupation){
         case 'warrior':
+            handleActionWarrior(character, otherCharacter);
             break;
 
         case 'gambler':
+            handleGamblerAction(character, otherCharacter);
             break;
 
         case 'thug':
+            handleThugAction(character, otherCharacter);
             break;
 
         case 'mage':
+            handleActionMage(character, otherCharacter);
             break;
 
         case 'peasant':
+            handlePeasant(character, filteredArray);
             break;
     }
 }
